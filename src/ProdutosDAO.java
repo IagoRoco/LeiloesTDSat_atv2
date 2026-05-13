@@ -80,6 +80,32 @@ public class ProdutosDAO {
                 System.out.println("Erro ao conectar.");         
         }       return false;
     }
+    
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+        ArrayList<ProdutosDTO> produtosDTO = new ArrayList<>();
+        
+        try (Connection conn = new conectaDAO().connectDB(); 
+             PreparedStatement prep = conn.prepareStatement(sql); 
+             ResultSet rs = prep.executeQuery()){
+            
+            while (rs.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(rs.getInt("id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setValor(rs.getInt("valor"));
+                produto.setStatus(rs.getString("status"));
+                
+                produtosDTO.add(produto);       
+            }
+
+            return produtosDTO;
+            
+            } catch (SQLException e) {
+                System.out.println("Erro ao conectar.");         
+        }       
+            return null;       
+    }
        
 }
 
