@@ -26,10 +26,11 @@ public class ProdutosDAO {
     public boolean cadastrarProduto (ProdutosDTO produto){
  
     try (Connection conn = new conectaDAO().connectDB(); 
-         PreparedStatement prep = conn.prepareStatement("INSERT INTO produtos (nome, valor) VALUES(?,?)")){
+         PreparedStatement prep = conn.prepareStatement("INSERT INTO produtos (nome, valor, status) VALUES(?,?,?)")){
                
             prep.setString(1, produto.getNome());
             prep.setInt(2, produto.getValor());
+            prep.setString(3, produto.getStatus());
             prep.executeUpdate();
             
             JOptionPane.showMessageDialog(null,"Produto cadastrado com sucesso!");
@@ -63,6 +64,21 @@ public class ProdutosDAO {
                 System.out.println("Erro ao conectar.");         
         }       
             return null;       
+    }
+    
+    public boolean venderProduto (ProdutosDTO produto){
+ 
+    try (Connection conn = new conectaDAO().connectDB(); 
+         PreparedStatement prep = conn.prepareStatement("UPDATE produtos SET status = 'Vendido' WHERE ID = ?")){
+               
+            prep.setInt(1, produto.getId());
+            prep.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null,"Produto atualizado para vendido!");
+            return true;
+            } catch (SQLException e) {
+                System.out.println("Erro ao conectar.");         
+        }       return false;
     }
        
 }
